@@ -6,15 +6,15 @@ import toast from "react-hot-toast";
 
 function SendOtpform() {
   const [email, setEmail] = useState("");
-  const { isPending, error, data, mutateAsync } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: getOtp,
   });
   const sendOtpHandler = async (e) => {
     e.preventDefault();
     try {
       const data = await mutateAsync({ email });
-      console.log(data);
-      toast.success(data.message);
+
+      toast.success(data);
     } catch (error) {
       console.log(error);
 
@@ -25,7 +25,7 @@ function SendOtpform() {
     <div>
       <form className="space-y-8" onSubmit={sendOtpHandler}>
         <TextField
-          label={"شماره موبایل"}
+          label={"ایمیل"}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name="email"
