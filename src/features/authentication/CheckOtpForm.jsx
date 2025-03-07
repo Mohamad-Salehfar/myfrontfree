@@ -1,11 +1,27 @@
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import OTPInput from "react-otp-input";
+import { checkOtp } from "../../services/authService";
+import toast from "react-hot-toast";
 
-function CheckOtp() {
+function CheckOtpForm({ email }) {
   const [otp, setOtp] = useState("");
+  const { isPending, error, data, mutateAsync } = useMutation({
+    mutationFn: checkOtp,
+  });
+  const checkOtpHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await mutateAsync({ email, otp });
+      console.log(data);
+      toast.success(data);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
   return (
     <div>
-      <form className="space-y-10">
+      <form className="space-y-10" onSubmit={checkOtpHandler}>
         <p className="font-bold text-secondary-800">کد تایید را وارد کنید</p>
         <OTPInput
           value={otp}
@@ -27,4 +43,4 @@ function CheckOtp() {
   );
 }
 
-export default CheckOtp;
+export default CheckOtpForm;
